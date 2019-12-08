@@ -1,0 +1,8 @@
+pip install django
+pip install djangorestframework # restFramework
+pip install markdown       # Markdown support for the browsable API.
+pip install django-filter  # Filtering support
+#A Django App that adds Cross-Origin Resource Sharing (CORS) headers to responses. This allows in-browser requests to your Django application from other origins.
+pip install django-cors-headers
+
+pip install djangorestframework-jwt
