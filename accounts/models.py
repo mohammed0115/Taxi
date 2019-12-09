@@ -71,8 +71,8 @@ class user(AbstractUser):
     log =models.FloatField(max_length=20,null=True)
     status=models.IntegerField(choices=STATUS_CHOICE, blank=True, null=True)
     bloodClass=models.CharField(max_length=5,null=True)
-    License = models.ForeignKey(License, blank=True, null=True,on_delete=models.CASCADE)
-    Vehicle = models.ForeignKey(Vehicle, blank=True, null=True,on_delete=models.CASCADE)
+    License = models.ForeignKey(License, blank=True, null=True,on_delete=None)
+    Vehicle = models.ForeignKey(Vehicle, blank=True, null=True,on_delete=None)
     # objects = UserManager()
     user_permissions=User.user_permissions
     groups=User.groups

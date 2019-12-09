@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'License',
     'Vehicle',
     'APIKEY',
-    'corsheaders'
+    'corsheaders',
+    'import_export',
 
 ]
 

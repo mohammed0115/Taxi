@@ -1,13 +1,13 @@
 from django.contrib import admin
 
 from django.contrib import admin
-
+from import_export.admin import ImportExportActionModelAdmin
 # Register your models here.
 # Register your models here.
 from django.contrib import admin
 from .models import user
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ImportExportActionModelAdmin,admin.ModelAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

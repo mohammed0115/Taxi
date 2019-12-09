@@ -17,7 +17,7 @@ class Journey (models.Model):
     EndTime   = models.TimeField(verbose_name=None, name=None, auto_now=False, auto_now_add=False)
     Journey_type = models.IntegerField(default=1, choices=TYPE_CHOICES)
     status = models.IntegerField(default=1, choices=STATUS_CHOICE)
-    Categories = models.ForeignKey(Categories, blank=True, null=True,on_delete=models.CASCADE)
-    user = models.ForeignKey(user, blank=True, null=True,on_delete=models.CASCADE)
+    Categories = models.ForeignKey(Categories, blank=True, null=True,on_delete=None)
+    user = models.ForeignKey(user, blank=True, null=True,on_delete=None)
 
 
