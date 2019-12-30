@@ -23,21 +23,39 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from accounts.permissions import HasValidAPIKey
 
+from django.shortcuts import render
+from rest_framework import  viewsets,mixins
+from accounts.serializers import DriverSerializer,clientSerializer
+from accounts.models import client,driver
+from accounts.permissions import HasValidAPIKey
+
 class UserViews(APIView):
-    permission_classes = [HasValidAPIKey]
+    permission_classes = []
     def get(self,request,pk):
         queryset = user.objects.filter(pk=pk)
         return Response(queryset.values())
 class UsersViews(APIView):
-    permission_classes = [HasValidAPIKey]
+    permission_classes = []
     queryset   = user.objects.all()
     
     def get(self,request):
         return Response(self.queryset.values())
     
+
+
+
+class driverViewSet(viewsets.ModelViewSet):
+    
+    queryset = driver.objects.all()
+    serializer_class = DriverSerializer
+    permission_classes = []
         
 
-       
+class ClientViewSet(viewsets.ModelViewSet):
+    
+    queryset = client.objects.all()
+    serializer_class = clientSerializer
+    permission_classes = []
 
 
 class Register(APIView):

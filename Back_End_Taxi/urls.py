@@ -21,12 +21,15 @@ from Journey.views import JourneyViewSet
 from License.views import LicenseViewSet
 from Vehicle.views import VehicleViewSet
 from rest_framework import routers
+from accounts.views import driverViewSet,ClientViewSet
 
 router = routers.DefaultRouter()
 router.register('Categories', CategoriesViewSet)
 router.register('Journey', JourneyViewSet)
 router.register('License', LicenseViewSet)
 router.register('Vehicle', VehicleViewSet)
+router.register('driver', driverViewSet)
+router.register('client', ClientViewSet)
 
 
 

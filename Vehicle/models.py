@@ -8,5 +8,6 @@ class Vehicle(models.Model):
     model=models.CharField(max_length=90)
     year = models.IntegerField()
     Categories = models.ForeignKey(Categories, blank=True, null=True,on_delete=None)
+    fuel=models.CharField(max_length=20)
     def __str__(self):
         return str("chassNo:",self.chassNo,"plateNo:",self.plateNo,"color:",self.color)

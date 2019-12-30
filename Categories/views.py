@@ -8,4 +8,4 @@ class CategoriesViewSet(viewsets.ModelViewSet):
     
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
-    permission_classes = [HasValidAPIKey]
+    permission_classes = []

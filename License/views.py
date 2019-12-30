@@ -10,4 +10,4 @@ class LicenseViewSet(viewsets.ModelViewSet):
     
     queryset = License.objects.all()
     serializer_class = LicenseSerializer
-    permission_classes = [HasValidAPIKey]
+    permission_classes = []
