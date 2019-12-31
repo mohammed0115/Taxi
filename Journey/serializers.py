@@ -5,40 +5,68 @@ from rest_framework import serializers
 from rest_framework import serializers
 from accounts.serializers import UserSerializer
 from Journey.models import trip
-from accounts.serializers import clientSerializer
-from accounts.serializers import DriverSerializer
-from Categories.serializers import CategoriesSerializer
+from accounts.models import client
+from accounts.models import driver
+from Categories.models import Categories
 
+class CategoriesSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=20)
+    price = serializers.IntegerField()
+    class Meta:
+        model=Categories
+        
 
-
-
-
+class clientSerializer(serializers.Serializer):
+    phone = serializers.CharField(max_length=20)
+    class Meta:
+        model=client
+        
+class DriverSerializer(serializers.Serializer):
+    phone = serializers.CharField(max_length=20)
+    class Meta:
+        model=driver
+        
 
 class JourneySerializer(serializers.ModelSerializer):
-    # Categories=CategoriesSerializer()
-    # client=clientSerializer()
-    # driver= DriverSerializer()
+    Categories=CategoriesSerializer()
+    client=clientSerializer()
+    driver= DriverSerializer()
     
     class Meta:
         model = trip
-        fields =['startLat','startLon','endLat','endLon', 'price','distance',
-        'starttime','EndTime','Journey_type','stat',]
+        fields =['id','startLat','startLon','endLat','endLon', 'price','distance',
+        'starttime','EndTime','Journey_type','stat','Categories','client','driver']
     def create(self, validated_data):
         """
         Create and return a new `User` instance, given the validated data.
         """
-        # s=validated_data
-        # print(s['Categories'])
-        # Categories=CategoriesSerializer(data=s)
-        # if Categories.is_valid():
-        #     Categories.save()
+        Categories_data = validated_data.pop('Categories')
+        client_data = validated_data.pop('client')
+        driver_data = validated_data.pop('driver')
 
-        return trip.objects.create(**validated_data)
+
+        t = trip.objects.create(**validated_data)
+        # print(Categories_data.get('name'))
+        cat, created = Categories.objects.get_or_create(**Categories_data)
+        cln,created  =client.objects.get_or_create(**client_data)
+        drv,created  = driver.objects.get_or_create(**driver_data)
+        t.Categories=cat
+        t.client=cln
+        t.driver=drv
+        t.save()
+        
+        return t
 
     def update(self, instance, validated_data):
         """
         Update and return an existing `User` instance, given the validated data.
         """
+        Categories_data = validated_data.pop('Categories')
+        client_data = validated_data.pop('client')
+        driver_data = validated_data.pop('driver')
+
+
+
         instance.startLat = validated_data.get('startLat', instance.startLat)
         instance.startLon = validated_data.get('startLon', instance.startLon)
         instance.endLat = validated_data.get('endLat', instance.endLat)
@@ -49,10 +77,18 @@ class JourneySerializer(serializers.ModelSerializer):
         instance.EndTime = validated_data.get('EndTime', instance.EndTime)
         instance.Journey_type = validated_data.get('Journey_type', instance.Journey_type)
         instance.stat = validated_data.get('stat', instance.stat)
-        # instance.Categories = validated_data.get('Categories', instance.Categories)
-        # # instance.Categories=CategoriesSerializer.update(instance,validated_data)
-        # instance.client = validated_data.get('client', instance.client)
-        # instance.driver = validated_data.get('driver', instance.driver)
+        
+        cat, created = Categories.objects.get_or_create(**Categories_data)
+        
+        cln,created  =client.objects.get_or_create(**client_data)
+        
+        drv,created  = driver.objects.get_or_create(**driver_data)
+        
+
+        instance.Categories = cat
+        # instance.Categories=CategoriesSerializer.update(instance,validated_data)
+        instance.client = cln
+        instance.driver = drv
 
         instance.save()
         return instance

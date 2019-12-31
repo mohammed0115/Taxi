@@ -8,8 +8,8 @@ class JourneyAdmin(ImportExportActionModelAdmin,admin.ModelAdmin):
     
     fields = (
         'startLat','startLon','endLat','endLon', 'price','distance',
-        'starttime','EndTime','Journey_type','stat','Categories'
+        'starttime','EndTime','Journey_type','stat','Categories','client','driver'
     )
     list_display = ['id','startLat','startLon','endLat','endLon', 'price','distance',
-        'starttime','EndTime','Journey_type','stat','Categories',]
+        'starttime','EndTime','Journey_type','stat','Categories','client','driver']
 admin.site.register(trip, JourneyAdmin)

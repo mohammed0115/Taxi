@@ -10,4 +10,4 @@ class Vehicle(models.Model):
     Categories = models.ForeignKey(Categories, blank=True, null=True,on_delete=None)
     fuel=models.CharField(max_length=20)
     def __str__(self):
-        return str("chassNo:",self.chassNo,"plateNo:",self.plateNo,"color:",self.color)
+        return str(self.chassNo)+","+str(self.plateNo)

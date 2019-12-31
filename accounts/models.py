@@ -110,8 +110,7 @@ class driver(AbstractUser):
     objects = UserManager()
     user_permissions=User.user_permissions
     groups=User.groups
-    def __str__(self):
-        return self.username
+    
     class Meta:
         verbose_name_plural="Driver"
     
