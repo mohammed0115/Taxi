@@ -28,31 +28,31 @@ class DriverSerializer(serializers.Serializer):
         
 
 class JourneySerializer(serializers.ModelSerializer):
-    Categories=CategoriesSerializer()
+    # Categories=CategoriesSerializer()
     client=clientSerializer()
-    driver= DriverSerializer()
+    # driver= DriverSerializer()
     
     class Meta:
         model = trip
         fields =['id','startLat','startLon','endLat','endLon', 'price','distance',
-        'starttime','EndTime','Journey_type','stat','Categories','client','driver']
+        'Journey_type','stat','client']
     def create(self, validated_data):
         """
         Create and return a new `User` instance, given the validated data.
         """
-        Categories_data = validated_data.pop('Categories')
+        # Categories_data = validated_data.pop('Categories')
         client_data = validated_data.pop('client')
-        driver_data = validated_data.pop('driver')
+        # driver_data = validated_data.pop('driver')
 
 
         t = trip.objects.create(**validated_data)
         # print(Categories_data.get('name'))
-        cat, created = Categories.objects.get_or_create(**Categories_data)
+        # cat, created = Categories.objects.get_or_create(**Categories_data)
         cln,created  =client.objects.get_or_create(**client_data)
-        drv,created  = driver.objects.get_or_create(**driver_data)
-        t.Categories=cat
+        # drv,created  = driver.objects.get_or_create(**driver_data)
+        # t.Categories=cat
         t.client=cln
-        t.driver=drv
+        # t.driver=drv
         t.save()
         
         return t
