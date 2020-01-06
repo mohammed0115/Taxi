@@ -1,4 +1,16 @@
+import operator
+from django.db.models import Q
+from Journey.Query import Query 
+from Journey.Query import get_query
+from Journey.Query import get_query__endswith
+from Journey.Query import get_query__startswith
+from Journey.Query import get_query__lte
+from Journey.Query import get_query__lt
+from Journey.Query import get_query__gte
+from Journey.Query import get_query__gt
+from Journey.Query import get_query__
 
+from functools import reduce
 from django.shortcuts import render
 from rest_framework import  viewsets,mixins
 from Journey.serializers import JourneySerializer
@@ -25,75 +37,63 @@ class SearchForTrip(APIView):
             return True
         else:
             return False
+    def getMyQ(self,data):
+        query_list=[]
+        for i in data:
+            l=[]
+            l.append(i)
+            if "__gte" in i.strip():
+                
+               x=get_query__(str(data[i]),l)
+               query_list.append(x)
+            elif "__lte" in i.strip():
+                x=get_query__(str(data[i]),l)
+                query_list.append(x)
+            elif "__gt" in i.strip():
+                x=get_query__(str(data[i]),l)
+                query_list.append(x)
+            elif "__lt" in i.strip():
+                x=get_query__(str(data[i]),l)
+                query_list.append(x)
+            elif "__startswith" in i.strip():
+                x=get_query__(str(data[i]),l)
+                query_list.append(x)
+            elif "__endswith" in i.strip():
+                x=get_query__(str(data[i]),l)
+                query_list.append(x)
+                
+            else:
+
+                x=get_query(str(data[i]),l)
+                print(x)
+                query_list.append(x)
+        return query_list
+
+    def getSep(self,query_list,sep):
+        query=Q()
+        if sep['sep']==1 :
+            for j in query_list:
+                query&=j
+        else:
+            for j in query_list:
+                query|=j
+                
+        return query 
     def post(self,request):
         data=request.data
-        print (data)
-        search={}
-        context={}
-        # 'startLat','startLon','endLat','endLon', 'price','distance','starttime','EndTime','Journey_type','stat',
-        if self.isindict(data,'Categories'):
-            c=data.pop('Categories')
-            print(c)
-            cat =Categories.objects.get(**c)
-            search['Categories']=cat.id
-        if self.isindict(data,'client'):
-            cln=data.pop('client')
-            clt =client.objects.get(**cln) 
-            search['client']=clt.id
-        if self.isindict(data,'driver'):
-            cln=data.pop('driver')
-            clt =client.objects.get(**cln) 
-            search['driver']=clt.id
-        if self.isindict(data,'startLat'):
-            search['startLat']=data['startLat']
-        if self.isindict(data,'startLon'):
-            search['startLon']=data['startLon']
-        if self.isindict(data,'id'):
-            search['id']=data['id']
-        if self.isindict(data,'endLat'):
-            search['endLat']=data['endLat']
-        if self.isindict(data,'endLon'):
-            search['endLon']=data['endLon']
-        if self.isindict(data,'price'):
-            search['price']=data['price']
-        if self.isindict(data,'distance'):
-            search['distance']=data['distance']
-        if self.isindict(data,'starttime'):
-            search['starttime']=data['starttime']
-        if self.isindict(data,'EndTime'):
-            search['EndTime']=data['EndTime']
-        if self.isindict(data,'Journey_type'):
-            search['Journey_type']=data['Journey_type']
-        if self.isindict(data,'stat'):
-            search['stat']=data['stat']
+        sep={"sep":4}
+        if self.isindict(data,'sep'):
+            sep['sep']=data.pop('sep')
+            print("sep===>",sep)
         else:
-            context={"error":"wrong fields "}
-        if len(search)==0:
-            return Response(context)
+            sep['sep']=4
+        if sep.get('sep')==4:
+            return Response({"message":"Error"},status=404)
         else:
-            trip_data = trip.objects.filter(**search)
-            context ={
-            "message":"success",
-            "search":trip_data.values()
-            }
-            return Response(context,status=200)
-        
-       
-
-
-
-        # c=data.pop('Categories')
-        # cln=data.pop('client') 
-        # drv=data.pop('driver')      
-        # cat =Categories.objects.get(**c)
-        # clt =client.objects.get(**cln)
-        # drivr =driver.objects.get(**drv)
-        # trip_data = trip.objects.filter(Categories=cat,client=clt,driver=drivr)
-        # print(trip_data.values())
-       
-    
-        # context ={
-        #     "message":"success",
-        #     "trip_search":trip_data.values()
-        # }
-        # return Response(context,status=200)
+            query=self.getSep(self.getMyQ(data),sep)
+            t=trip.objects.filter(query)
+            context={
+                "Search":t.values(),
+               
+                 }
+            return Response(context,status=200)        
