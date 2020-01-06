@@ -9,8 +9,8 @@ lt  less than
 the field "seperation" ether value '|' or '&'
 
 {
-"condition":
-[{
+
+{
 "field_name1__startswith":'ll',
 "field_name2__endswith":'kk',
 "fieldname3":'nn',
@@ -20,21 +20,20 @@ the field "seperation" ether value '|' or '&'
 "field_name5__gt":'vb',
 }]
 ,
-"seperation":"|"
+"sep":"1"
 
 }
 
 
 
-example 
+example  where sep =1 is and where sep=2 is or 
 
 {
-"condition":
-[{
+
 "Journey_type": 1,
             "stat": 4
-}]
+
 ,
-"seperation":"|"
+"sep":"1"
 
 }
